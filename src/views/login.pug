@@ -1,0 +1,29 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title login
+    link(rel="stylesheet", href="login.css")
+  
+  body
+    .main
+      //- Log in page label and class
+      .Login
+        form
+          label.Spacetext Spacetext
+          label Log in
+          input.login(type="email", name="email", placeholder="Email", required="")
+          input.password(type="password", name="password", placeholder="Password", required="")
+          button(name="loginButton", type="submit") Log in
+      .SignUp
+        form
+          label.Spacetext Spacetext
+          label.noAccount Don't have an account?
+          label Sign Up
+          input.login(type="email", name="newemail", placeholder="Email", required="")
+          input.password(type="password", name="newPassword", placeholder="New Password", required="")
+          input.confirmPassword(type="password", name="confirmPassword", placeholder="Confirm Password", required="")
+          button(name="signupButton", type="submit") Sign up
+
+    script(src="actions.js")

@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Jost' , sans-serif;
+    background: linear-gradient(to top, #ace896, #d8daf7);
+    background-attachment: fixed;
+}
+
+.main {
+    width: 350px;
+    height: 500px;
+    /* background: #67a1f3; */
+}
+
+label {
+    color: black;
+    font-size: 1.3em;
+    justify-content: center;
+    display: flex;
+    margin: 0px;
+    font-weight: bold;
+    transition: .5s ease-in-out;
+}
+
+input {
+    width: 60%;
+    height: 20px;
+    background: #e0dede;
+    justify-content: center;
+    display: flex;
+    margin: 10px auto;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+button {
+    width: 60%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    display: block;
+    color: black;
+    background: white;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .1s ease-in-out;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #c7c7c7;
+}
+
+a.button {
+    width: 60%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    display: block;
+    color: black;
+    background: white;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .1s ease-in-out;
+    cursor: pointer;
+}
+
+a.button:hover {
+    background: #c7c7c7;
+}
+
+.Login {
+    height: 260px;
+    background: #aedc9d;
+}
+
+.Login .Spacetext {
+    visibility: hidden;
+}
+
+.Login label {
+    margin-top: 10px;
+    color: black;
+}
+
+.SignUp {
+    height: 320px;
+    background: #aedc9d;
+}
+
+.SignUp .Spacetext {
+    visibility: hidden;
+}
+
+.SignUp .noAccount {
+    font-size: 1em;
+}
+
+.SignUp label {
+    margin-top: 10px;
+    color: black;
+}

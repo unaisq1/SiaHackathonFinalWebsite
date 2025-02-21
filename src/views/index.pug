@@ -1,0 +1,331 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Navigation Bar
+    link(rel="stylesheet", href="index.css")
+    script(type="module", src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js")
+    
+  body
+    //- .loginOverlay 
+
+    .top-bar
+      .dropdown
+        ion-icon(name="person-circle-outline", class="user-icon", onclick="toggleDropdown()")
+        .dropdown-content(id="dropdownContent")
+          a(href="#", onclick="changePage('settings')") Account Settings
+          a(href="/login") Log Out
+        ion-icon(name="wallet-outline", class="wallet-icon", onclick="changePage('wallet')")
+
+    .bottom-bar
+        ion-icon(name="home-outline", class="home-icon", onclick="changePage('home')")
+        ion-icon(name="cash-outline", class="redeem-icon", onclick="changePage('redeem')")
+
+    #content
+      //- Content for pages will be loaded here
+
+    script.
+      let webLanguage = "English";
+
+      function getLanguage() {
+          return webLanguage;
+      }
+
+      function setLanguage(newLanguage) {
+          webLanguage = newLanguage;
+      }
+
+      function toggleDropdown() {
+          var dropdownContent = document.getElementById("dropdownContent");
+          dropdownContent.classList.toggle("show");
+      }
+
+      window.onload = fetchPage("home","English");
+
+      window.onclick = function(event) {
+          if (!event.target.matches('.user-icon')) {
+              var dropdowns = document.getElementsByClassName("dropdown-content");
+              var i;
+              for (i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                      openDropdown.classList.remove('show');
+                  }
+              }
+          }
+      }
+
+      function changePage(pageName, currentLanguage) {
+          const buttons = document.querySelectorAll('.icon');
+          buttons.forEach(button => button.classList.remove("active"));
+          
+          event.target.classList.add("active");
+          fetchPage(pageName,getLanguage());
+      }
+
+       function redeemVoucher(deduction, tokenBalance) {
+        if (tokenBalance < deduction) {
+            alert('You do not have enough tokens to redeem this voucher.');
+            return;
+        }
+        console.log(`Redeem voucher called with deduction: ${deduction}`);
+        const userEmail = getCookie('userEmail');
+        if (!userEmail) {
+            alert('User email not found.');
+            return;
+        }
+        
+        fetch('/deductBalance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: userEmail,
+                deduction: deduction
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload page to fetch new token balance
+            } else {
+                alert('Error redeeming voucher.');
+            }
+        })
+        .catch(err => {
+            console.error('Error redeeming voucher:', err);
+            alert('Error redeeming voucher.');
+        });
+      }
+
+      function addTokens() {
+        console.log(`Adding 5000 tokens`);
+        const userEmail = getCookie('userEmail');
+        if (!userEmail) {
+            alert('User email not found.');
+            return;
+        }
+        
+        fetch('/addToBalance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: userEmail,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload page to fetch new token balance
+            } else {
+                alert('Error adding tokens.');
+            }
+        })
+        .catch(err => {
+            console.error('Error adding tokens:', err);
+            alert('Error adding tokens.');
+        });
+      }
+
+
+      function fetchPage(pageName,currentLanguage) {
+        let content = '';
+        if (pageName === 'home' && currentLanguage == "English") {
+            content = `
+                <div class="home-content">
+                    <p class ="Spacetext">Spacetext</p>
+                    <p class="hometextone">Offers</p>
+                    <div class="popularplaces">
+                        <p>Tesco £5 Voucher</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Primark £15 Voucher</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Fortnite V-Bucks £25 Voucher</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                    <p class="hometexttwo">What's New</p>
+                    <div class="recentplaces">
+                        <p>Primark £15 Voucher</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Fortnite V-Bucks £25 Voucher</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Tesco £5 Voucher</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                    <p class="hometextthree">Popular</p>
+                    <div class="nearplaces">
+                        <p>Fortnite V-Bucks £25 Voucher</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Primark £15 Voucher</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Tesco £5 Voucher</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                </div>`;
+        } else if (pageName === 'home' && currentLanguage == "French") {
+            content = `
+                <div class="home-content">
+                    <p class ="Spacetext">Spacetext</p>
+                    <p class="hometextone">Offres</p>
+                    <div class="popularplaces">
+                        <p>Bon Tesco de 5 £</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon d'achat Primark de 15 £</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon d'achat Fortnite V-Bucks de 25 £</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                    <p class="hometexttwo">Quoi de neuf</p>
+                    <div class="recentplaces">
+                        <p>Bon d'achat Primark de 15 £</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon d'achat Fortnite V-Bucks de 25 £</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon Tesco de 5 £</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                    <p class="hometextthree">Populaire</p>
+                    <div class="nearplaces">
+                        <p>Bon d'achat Fortnite V-Bucks de 25 £</p>
+                        <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon d'achat Primark de 15 £</p>
+                        <img src="Primark-Logo.png" alt="Fortnite" class="voucher25">
+                        <p>Bon Tesco de 5 £</p>
+                        <img src="Tesco-Logo.png" alt="Fortnite" class="voucher25">
+                    </div>
+                </div>`;
+        } else if (pageName === 'redeem' && currentLanguage == 'English') {
+            fetch('/api/tokens')
+              .then(response => response.json())
+              .then(data => {
+                  const tokenBalance = data.tokens ? data.tokens : '0';
+                  content = `
+                    <div class="redeem-content">
+                        <div class="image-container">
+                            <div class="balance-text">Your Balance: ${tokenBalance}</div>
+                            <p class="voucher5description">Tesco £5 Voucher (500 Points)</p>
+                            <img src="Tesco-Logo.png" alt="Tesco" class="voucher5" onclick="redeemVoucher(500, ${tokenBalance})">                       
+                            <p class="voucher15description">Primark £15 Voucher (1500 Points)</p>
+                            <img src="Primark-Logo.png" alt="Primark" class="voucher15" onclick="redeemVoucher(1500, ${tokenBalance})">
+                            <p class="voucher25description">Fortnite £25 V-Bucks Voucher (2500 Points)</p>
+                            <img src="Fortnite-Logo.png" alt="Fortnite" class="voucher25" onclick="redeemVoucher(2500, ${tokenBalance})">
+                        </div>
+                    </div>`;
+                  document.getElementById('content').innerHTML = content;                  
+                  })
+              .catch(err => {
+                  console.error('Error fetching tokens:', err);
+                  content = `<p>Error fetching your token balance</p>`;
+                  document.getElementById('content').innerHTML = content;
+              });
+        } else if (pageName === 'redeem' && currentLanguage == 'French') {
+            fetch('/api/tokens')
+              .then(response => response.json())
+              .then(data => {
+                  const tokenBalance = data.tokens ? data.tokens : '0';
+                  content = `
+                    <div class="redeem-content">
+                        <div class="image-container">
+                            <div class="balance-text">Votre solde: ${tokenBalance}</div>
+                            <p class="voucher5description">Bon Tesco de 5 £ (500 Points)</p>
+                            <img src="Tesco-Logo.png" alt="5 Enviropoints" class="voucher5" onclick="redeemVoucher(500, ${tokenBalance})">                       
+                            <p class="voucher15description">Bon d'achat Primark de 15 £ (1500 Points)</p>
+                            <img src="Primark-Logo.png" alt="15 Enviropoints" class="voucher15" onclick="redeemVoucher(1500, ${tokenBalance})">
+                            <p class="voucher25description">Bon d'achat Fortnite V-Bucks de 25 £ (2500 Points)</p>
+                            <img src="Fortnite-Logo.png" alt="25 Enviropoints" class="voucher25" onclick="redeemVoucher(2500, ${tokenBalance})">
+                        </div>
+                    </div>`;
+                  document.getElementById('content').innerHTML = content;
+                  })
+              .catch(err => {
+                  console.error('Error fetching tokens:', err);
+                  content = `<p>Error fetching your token balance</p>`;
+                  document.getElementById('content').innerHTML = content;
+              });
+        } else if (pageName === 'wallet' && currentLanguage == 'English') {
+            // Fetch wallet data dynamically
+            fetch('/api/tokens')
+              .then(response => response.json())
+              .then(data => {
+                  const tokenBalance = data.tokens ? data.tokens : '0';
+                  content = `
+                    <div class="wallet-content">
+                      <img src="Wallet Icon.png" alt="wallet-image" class="wallet-image">
+                      <div class="balance-display">
+                        <div class="balance-text">Your Balance: ${tokenBalance}</div>
+                      </div>
+                      <img src="github-qr-code.png" alt="QR Code" class="qr-code">
+                      <button alt="REDEEM" class="redeembutton" onclick="changePage('redeem')">Redeem</button>
+                      <button alt="AddToken" class="addTokenButton" onclick="addTokens()">Add Tokens</button>
+                      <div class="balance-display">
+                        <div class="balance-text">Have any issues? Contact us here:</div>
+                        <div class="balance-text">rapscallionion@gmail.com</div>
+                      </div>
+                    </div>`;
+                  document.getElementById('content').innerHTML = content;
+              })
+              .catch(err => {
+                  console.error('Error fetching tokens:', err);
+                  content = `<p>Error fetching your token balance</p>`;
+                  document.getElementById('content').innerHTML = content;
+              });
+        } else if (pageName === 'wallet' && currentLanguage == 'French') {
+            // Fetch wallet data dynamically
+            fetch('/api/tokens')
+              .then(response => response.json())
+              .then(data => {
+                  const tokenBalance = data.tokens ? data.tokens : '0';
+                  content = `
+                    <div class="wallet-content">
+                        <img src="Wallet Icon.png" alt="wallet-image" class="wallet-image">
+                        <div class="balance-display">
+                            <div class="balance-text">Votre solde: ${tokenBalance}</div>
+                        </div>
+                        <img src="github-qr-code.png" alt="QR Code" class="qr-code">
+                        <button alt="REDEEM" class="redeembutton" onclick="changePage('redeem')">Racheter</button>
+                        <button alt="AddToken" class="addTokenButton" onclick="addTokens()">Ajouter des Jetons</button>
+                        <div class="balance-display">
+                            <div class="balance-text">Vous avez des problèmes ? Contactez-nous ici :</div>
+                            <div class="balance-text">rapscallionion@gmail.com</div>
+                        </div>
+                    </div>`;
+                  document.getElementById('content').innerHTML = content;
+              })
+              .catch(err => {
+                  console.error('Error fetching tokens:', err);
+                  content = `<p>Error fetching your token balance</p>`;
+                  document.getElementById('content').innerHTML = content;
+              });
+        } else if (pageName == 'settings' && currentLanguage == 'English') {
+            content = `
+                <div class="settings-content">
+                    <p class="Title">Settings</p>
+                    <p class="Language">Language: </p>
+                    <div align="center">
+                        <select class="Languages" onchange="setLanguage(this.value); changePage('settings', this.value)">
+                            <option value="English">English</option>
+                            <option value="French">French</option>
+                        </select>
+                    </div>
+                </div>`;
+        } else if (pageName == 'settings' && currentLanguage == 'French') {
+            content = `
+                <div class="settings-content">
+                    <p class="Title">Paramètres</p>
+                    <p class="Language">Langue: </p>
+                    <div align="center">
+                        <select class="Languages" onchange="setLanguage(this.value); changePage('settings', this.value)">
+                            <option value="French">French</option>
+                            <option value="English">English</option>
+                        </select>
+                    </div>
+                </div>`;
+        }
+          // Add other cases for redeem, myvouchers, wallet, settings, etc.
+          document.getElementById('content').innerHTML = content;
+      }
+    script(src="actions.js")
